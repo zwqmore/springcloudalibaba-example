@@ -1,0 +1,26 @@
+server:
+  port: 18080
+
+dubbo:
+  scan:
+    base-packages: com.zzz.pped
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://127.0.0.1:8848
+
+spring:
+  main:
+    # 解决Bean重复定义问题
+    allow-bean-definition-overriding: true
+  datasource:
+    dynamic:
+      primary: master
+      strict: false
+      datasource:
+        master:
+          url: jdbc:mysql://localhost/cloud?useUnicode=true&characterEncoding=utf-8&useTimezone=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+          username: root
+          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver

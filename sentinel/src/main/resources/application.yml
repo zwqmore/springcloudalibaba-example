@@ -1,0 +1,62 @@
+server:
+  port: 17070
+
+dubbo:
+  scan:
+    base-packages: com.zzz.pped
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    address: nacos://127.0.0.1:8848
+  cloud:
+    subscribed-services: pped-nacos,pped-record,pped-sentinel
+
+spring:
+  main:
+    # 解决Bean重复定义问题
+    allow-bean-definition-overriding: true
+  datasource:
+    dynamic:
+      primary: master
+      strict: false
+      datasource:
+        master:
+          url: jdbc:mysql://localhost/cloud2?useUnicode=true&characterEncoding=utf-8&useTimezone=true&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+          username: root
+          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver
+
+# Seata 分布式事务
+seata:
+  enabled: true
+  #seata注册的服务名称
+  application-id: seata-service
+  #此处配置自定义的seata事务分组名称
+  tx-service-group: my_tx_group
+  #开启数据库代理
+  enable-auto-data-source-proxy: false
+  config:
+    type: nacos
+    nacos:
+      #nacos地址
+      server-addr: 127.0.0.1:8848
+      #配置文件的命名空间
+      namespace: seata
+      dataId: "seataServer.properties"
+      #配置文件的分组名
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+  registry:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      #注册服务的命名空间
+      namespace: seata
+      #注册服务的名称
+      application: seata-server
+      #注册服务的分组名
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
